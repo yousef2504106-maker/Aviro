@@ -30,8 +30,8 @@
         }
 
         body {
-            background: #f7f8fa;
-            color: #222;
+            background: #ffffff;
+            color: #ffffff;
         }
 
         header {
@@ -39,19 +39,28 @@
             top: 0;
             width: 100%;
             height: 75px;
-            background: #fff;
+            background: #000000;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 40px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, .08);
+            box-shadow: 0 2px 12px rgb(255, 255, 255);
             z-index: 1000;
         }
 
         .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             font-size: 30px;
             font-weight: bold;
-            color: #ffcc00;
+            color: #ffffff;
+        }
+
+        .logo img {
+            height: 45px;
+            width: auto;
+            border-radius: 8px;
         }
 
         .search-box {
@@ -64,15 +73,15 @@
             border: none;
             outline: none;
             border-radius: 30px;
-            background: #f2f2f2;
+            background: #ffffff;
             padding: 0 20px;
             font-size: 16px;
             transition: .3s;
         }
 
         .search-box input:focus {
-            background: white;
-            box-shadow: 0 0 0 3px #ffe54c;
+            background: rgb(255, 255, 255);
+            box-shadow: 0 0 0 3px #000000;
         }
 
         .header-buttons {
@@ -82,8 +91,8 @@
         }
 
         .header-buttons button {
-            background: #ffcc00;
-            color: #000;
+            background: #ffffff;
+            color: #000000;
             border: none;
             padding: 12px 20px;
             border-radius: 30px;
@@ -93,14 +102,14 @@
         }
 
         .header-buttons button:hover {
-            background: #ffd900;
+            background: #717171;
             transform: translateY(-2px);
         }
 
         .hero {
             width: 100%;
             height: 420px;
-            background: linear-gradient(135deg, #ffe600, #ffcc00);
+            background: linear-gradient(135deg, #0084ff, #000000, #ffa824);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -110,11 +119,12 @@
         .hero h1 {
             font-size: 48px;
             margin-bottom: 20px;
+            color: #ffffff;
         }
 
         .hero p {
             font-size: 22px;
-            color: #444;
+            color: #ffffff;
         }
 
         .categories {
@@ -123,25 +133,25 @@
             gap: 15px;
             flex-wrap: wrap;
             padding: 30px;
-            background: white;
+            background: linear-gradient(135deg, #000000, #000000, #000000);
         }
 
         .filter-btn {
             padding: 12px 24px;
             border: none;
             border-radius: 30px;
-            background: #ececec;
+            background: #e2e2e2;
             cursor: pointer;
             transition: .3s;
             font-weight: bold;
         }
 
         .filter-btn:hover {
-            background: #ffcc00;
+            background: #ffffff;
         }
 
         .filter-btn.active {
-            background: #ffcc00;
+            background: #ffffff;
         }
 
         #productsContainer {
@@ -154,23 +164,23 @@
         }
 
         .product-card {
-            background: white;
+            background: rgb(255, 183, 0);
             border-radius: 18px;
             overflow: hidden;
             transition: .3s;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+            box-shadow: 0 6px 18px rgb(0, 55, 255);
         }
 
         .product-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, .15);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.15);
         }
 
         .product-card img {
             width: 100%;
             height: 220px;
             object-fit: contain;
-            background: #f8f8f8;
+            background: #ffffff;
             transition: 0.2s ease;
         }
 
@@ -181,6 +191,7 @@
         .product-info h3 {
             font-size: 18px;
             margin-bottom: 10px;
+            color: #000000;
         }
 
         .price-container {
@@ -193,12 +204,12 @@
         .current-price {
             font-size: 18px;
             font-weight: bold;
-            color: #000;
+            color: #000000;
         }
 
         .old-price {
             font-size: 14px;
-            color: #999;
+            color: #000000;
             text-decoration: line-through;
         }
 
@@ -210,9 +221,9 @@
 
         .add-to-cart-btn {
             width: 100%;
-            background: #ffcc00;
+            background: #000000;
             border: none;
-            color: #000;
+            color: #ffffff;
             padding: 12px;
             border-radius: 12px;
             cursor: pointer;
@@ -222,7 +233,7 @@
         }
 
         .add-to-cart-btn:hover {
-            background: #ffd900;
+            background: #333333;
             transform: scale(1.02);
         }
 
@@ -230,8 +241,8 @@
             position: fixed;
             bottom: 30px;
             right: 30px;
-            background: #a1761a;
-            color: white;
+            background: #ffffff;
+            color: rgb(0, 0, 0);
             padding: 18px;
             border-radius: 12px;
             opacity: 0;
@@ -266,10 +277,10 @@
             width: 400px;
             max-width: 100%;
             height: 100vh;
-            background: #fff;
+            background: #ffffff;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 0 30px rgba(0, 0, 0, .2);
+            box-shadow: 0 0 30px rgb(0, 0, 0);
             transition: .4s;
             z-index: 1000;
         }
@@ -283,18 +294,22 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #000000;
         }
 
         .cart-header h2 {
             font-size: 22px;
+            color: #000000;
         }
 
+        /* ===== علامة الإكس (✕) باللون الأسود - السطر 326 ===== */
         .cart-header button {
             border: none;
             background: none;
             font-size: 26px;
             cursor: pointer;
+            color: #000000;
+            /* تم تغييرها إلى الأسود */
         }
 
         #cartItems {
@@ -307,7 +322,7 @@
             display: flex;
             gap: 12px;
             margin-bottom: 18px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #000000;
             padding-bottom: 15px;
             align-items: center;
         }
@@ -317,7 +332,7 @@
             height: 70px;
             object-fit: contain;
             border-radius: 10px;
-            background: #fafafa;
+            background: #ffffff;
         }
 
         .cart-item-info {
@@ -327,10 +342,11 @@
         .cart-item-info h4 {
             font-size: 16px;
             margin-bottom: 4px;
+            color: #000000;
         }
 
         .cart-item-price {
-            color: #ff6600;
+            color: #000000;
             font-weight: bold;
         }
 
@@ -345,10 +361,18 @@
             width: 28px;
             height: 28px;
             border: none;
-            background: #eee;
+            background: #9e9e9e;
             border-radius: 50%;
             cursor: pointer;
             font-weight: bold;
+        }
+
+        /* ===== الأرقام بين + و - باللون الأسود - السطر 358 ===== */
+        .qty-box span {
+            color: #000000;
+            /* تم تغييرها إلى الأسود */
+            font-weight: bold;
+            font-size: 16px;
         }
 
         .remove-item {
@@ -361,15 +385,17 @@
         }
 
         .cart-footer {
-            border-top: 1px solid #eee;
+            border-top: 1px solid #000000;
             padding: 20px;
         }
 
+        /* ===== زر "إتمام الشراء" باللون الأخضر - السطر 377 ===== */
         .checkout-btn {
             width: 100%;
             border: none;
             background: #28a745;
-            color: #fff;
+            /* تم تغييرها إلى الأخضر */
+            color: #ffffff;
             padding: 14px;
             border-radius: 12px;
             cursor: pointer;
@@ -378,7 +404,7 @@
         }
 
         .checkout-btn:hover {
-            background: #208638;
+            background: #218838;
         }
 
         .clear-cart-btn {
@@ -397,9 +423,10 @@
         }
 
         footer {
-            background: #fad500;
-            color: #0a0a0a;
+            background: #ffffff;
+            color: #000000;
             padding: 50px 20px;
+
             margin-top: 60px;
         }
 
@@ -416,13 +443,13 @@
         }
 
         footer a {
-            color: #020202;
+            color: #000000;
             text-decoration: none;
             transition: .3s;
         }
 
         footer a:hover {
-            color: #faf9f6;
+            color: #000000;
         }
 
         .privacy-modal {
@@ -431,7 +458,7 @@
             display: none;
             justify-content: center;
             align-items: center;
-            background: rgba(0, 0, 0, .55);
+            background: rgba(255, 255, 255, 0.55);
             z-index: 2000;
         }
 
@@ -444,7 +471,7 @@
             max-width: 500px;
             max-height: 90vh;
             overflow: auto;
-            background: #fff;
+            background: #000000;
             border-radius: 20px;
         }
 
@@ -452,7 +479,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #ffcc00;
+            background: rgb(125, 125, 125);
             padding: 20px;
         }
 
@@ -471,16 +498,16 @@
 
         .checkout-box input {
             padding: 12px;
-            border: 1px solid #ccc;
+            border: 1px solid #ffffff;
             border-radius: 12px;
-            background: #fff;
-            color: #333;
+            background: #959595;
+            color: #ffffff;
             font-size: 16px;
             width: 100%;
         }
 
         .checkout-box input:focus {
-            outline: 2px solid #ffcc00;
+            outline: 2px solid #000000;
         }
 
         .privacy-modal-header button {
@@ -500,7 +527,7 @@
             width: 100%;
             height: 280px;
             overflow: hidden;
-            background: #f0f0f0;
+            background: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -516,7 +543,7 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            background: #fff;
+            background: #ffffff;
             user-select: none;
             pointer-events: none;
         }
@@ -526,8 +553,8 @@
             bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0,0,0,0.6);
-            color: #fff;
+            background: rgba(0, 0, 0, 0.6);
+            color: #ffffff;
             padding: 5px 15px;
             border-radius: 20px;
             font-size: 12px;
@@ -542,31 +569,39 @@
                 padding: 15px;
                 gap: 15px;
             }
+
             .search-box {
                 width: 100%;
             }
+
             .hero {
                 height: 280px;
                 padding: 20px;
             }
+
             .hero h1 {
                 font-size: 32px;
             }
+
             .hero p {
                 font-size: 18px;
             }
+
             #productsContainer {
                 padding: 20px;
                 grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             }
+
             .cart-sidebar {
                 width: 100%;
                 left: -100%;
             }
+
             footer div {
                 flex-direction: column;
                 align-items: center;
             }
+
             .image-360-container {
                 height: 200px;
             }
@@ -579,7 +614,10 @@
     <div class="overlay" id="overlay" onclick="toggleCart()"></div>
 
     <header>
-        <div class="logo">🛍️ Aviro</div>
+        <div class="logo">
+            <img src="https://g.top4top.io/p_38369skks1.jpeg" alt="Aviro Logo">
+            <span>AVIRO</span>
+        </div>
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="ابحث عن أي منتج..." onkeyup="searchProducts()">
         </div>
@@ -629,7 +667,8 @@
             </div>
             <div class="privacy-modal-body">
                 <h3>سياسة الخصوصية</h3>
-                <p>يلتزم متجر Aviro بحماية بيانات جميع المستخدمين، وعدم مشاركة البيانات مع أي جهة إلا بما يسمح به القانون.</p>
+                <p>يلتزم متجر Aviro بحماية بيانات جميع المستخدمين، وعدم مشاركة البيانات مع أي جهة إلا بما يسمح به
+                    القانون.</p>
                 <p>جميع بيانات الدفع يتم تشفيرها.</p>
                 <p>يمكنك طلب حذف بياناتك في أي وقت.</p>
                 <p>البريد الإلكتروني: <strong>Avirostore10@gmail.com</strong></p>
@@ -647,11 +686,13 @@
                 <div class="checkout-box">
                     <label for="clientName">الاسم بالكامل:</label>
                     <input type="text" id="clientName" placeholder="اكتب اسمك الثلاثي...">
-                    
+
                     <label for="clientLocation">عنوان السكن بالتفصيل (الموقع):</label>
-                    <input type="text" id="clientLocation" placeholder="المحافظة، المدينة، اسم الشارع، العلامة المميزة...">
-                    
-                    <button class="checkout-btn" onclick="sendOrderToWhatsApp()" style="margin-top:20px;">تأكيد وإرسال عبر واتساب 💬</button>
+                    <input type="text" id="clientLocation"
+                        placeholder="المحافظة، المدينة، اسم الشارع، العلامة المميزة...">
+
+                    <button class="checkout-btn" onclick="sendOrderToWhatsApp()" style="margin-top:20px;">تأكيد وإرسال
+                        عبر واتساب 💬</button>
                 </div>
             </div>
         </div>
@@ -660,7 +701,8 @@
     <footer>
         <p>© 2026 Aviro Store</p>
         <div>
-            <a href="https://heyzine.com/flip-book/94d895f61d.html" onclick="showPrivacyPolicy(event)">سياسة الخصوصية</a>
+            <a href="https://heyzine.com/flip-book/94d895f61d.html" onclick="showPrivacyPolicy(event)">سياسة
+                الخصوصية</a>
             <a href="mailto:Avirostore10@gmail.com">اتصل بنا</a>
         </div>
     </footer>
@@ -669,60 +711,57 @@
         // ============================================================
         //  بيانات المنتجات - مع صور 360 حقيقية
         // ============================================================
-        const allProducts = [
-            {
-                id: 1,
-                name: "شورت رجالي",
-                price: 720,
-                oldPrice: 999,
-                discount: "27%",
-                category: "ملابس",
-                // صور 360 من زوايا مختلفة (حقيقية)
-                images360: [
-                     
-                     "https://d.top4top.io/p_3834obtdm1.jpeg",
-                     "https://h.top4top.io/p_383483fep1.jpeg", 
-                     "https://f.top4top.io/p_3834sfu151.jpeg",
-                     "https://j.top4top.io/p_3834e1c1t1.jpeg",
-                     "https://j.top4top.io/p_383477vuj1.jpeg",
-                    "https://b.top4top.io/p_3834jid641.jpeg",
-                     "https://e.top4top.io/p_38346f8we1.jpeg", 
-                     "https://k.top4top.io/p_3834ndvyg1.jpeg",
-                     "https://e.top4top.io/p_3834kr83j1.jpeg",
-                    "https://e.top4top.io/p_38340mfo81.jpeg",
-                    "https://i.top4top.io/p_3834hq65u1.jpeg",
-                    "https://l.top4top.io/p_38340dzlv1.jpeg",
-                    "https://h.top4top.io/p_3834nnerg1.jpeg",
-                    "https://b.top4top.io/p_3834a5x881.jpeg",
-                    "https://h.top4top.io/p_3834c5hbu1.jpeg",
-                    "https://k.top4top.io/p_3834suuuv1.jpeg",
-                    "https://d.top4top.io/p_3834hox601.jpeg",
-                    "https://g.top4top.io/p_3834lt0rz1.jpeg",
-                    "https://a.top4top.io/p_3834mbihe1.jpeg",
-                    "https://g.top4top.io/p_3834qq5pb1.jpeg",
-                    "https://j.top4top.io/p_3834q5sdd1.jpeg",
-                    "https://d.top4top.io/p_3834r6yll1.jpeg",
-                    "https://a.top4top.io/p_38347el5e1.jpeg"              ]
-            },
-            {
-                id: 2,
-                name: "تيشيرت",
-                price: 756,
-                oldPrice: 1050,
-                discount: "28%",
-                category: "ملابس",
-                image: "https://e.top4top.io/p_3832v2k2m1.jpg"
-            },
-            {
-                id: 4,
-                name: "بنطلون",
-                price: 756,
-                oldPrice: 1050,
-                discount: "28%",
-                category: "ملابس",
-                image: "https://j.top4top.io/p_3832lszls1.jpg"
-            },
-        ];
+        const allProducts = [{
+            id: 1,
+            name: "شورت رجالي",
+            price: 720,
+            oldPrice: 999,
+            discount: "27%",
+            category: "ملابس",
+            // صور 360 من زوايا مختلفة (حقيقية)
+            images360: [
+
+                "https://d.top4top.io/p_3834obtdm1.jpeg",
+                "https://h.top4top.io/p_383483fep1.jpeg",
+                "https://f.top4top.io/p_3834sfu151.jpeg",
+                "https://j.top4top.io/p_3834e1c1t1.jpeg",
+                "https://j.top4top.io/p_383477vuj1.jpeg",
+                "https://b.top4top.io/p_3834jid641.jpeg",
+                "https://e.top4top.io/p_38346f8we1.jpeg",
+                "https://k.top4top.io/p_3834ndvyg1.jpeg",
+                "https://e.top4top.io/p_3834kr83j1.jpeg",
+                "https://e.top4top.io/p_38340mfo81.jpeg",
+                "https://i.top4top.io/p_3834hq65u1.jpeg",
+                "https://l.top4top.io/p_38340dzlv1.jpeg",
+                "https://h.top4top.io/p_3834nnerg1.jpeg",
+                "https://b.top4top.io/p_3834a5x881.jpeg",
+                "https://h.top4top.io/p_3834c5hbu1.jpeg",
+                "https://k.top4top.io/p_3834suuuv1.jpeg",
+                "https://d.top4top.io/p_3834hox601.jpeg",
+                "https://g.top4top.io/p_3834lt0rz1.jpeg",
+                "https://a.top4top.io/p_3834mbihe1.jpeg",
+                "https://g.top4top.io/p_3834qq5pb1.jpeg",
+                "https://j.top4top.io/p_3834q5sdd1.jpeg",
+                "https://d.top4top.io/p_3834r6yll1.jpeg",
+                "https://a.top4top.io/p_38347el5e1.jpeg"
+            ]
+        }, {
+            id: 2,
+            name: "تيشيرت",
+            price: 756,
+            oldPrice: 1050,
+            discount: "28%",
+            category: "ملابس",
+            image: "https://e.top4top.io/p_3832v2k2m1.jpg"
+        }, {
+            id: 4,
+            name: "بنطلون",
+            price: 756,
+            oldPrice: 1050,
+            discount: "28%",
+            category: "ملابس",
+            image: "https://j.top4top.io/p_3832lszls1.jpg"
+        }, ];
 
         // ============================================================
         //  المتغيرات والوظائف الأساسية
@@ -742,7 +781,7 @@
 
             productsToDisplay.forEach(product => {
                 const is360 = product.images360 && product.images360.length > 0;
-                
+
                 let imageHTML = '';
                 if (is360) {
                     imageHTML = `
@@ -758,7 +797,7 @@
                             <img id="img-${product.id}" 
                                  src="${product.images360[0]}" 
                                  alt="${product.name}">
-                        
+                            <div class="hint">↔ اسحب للتدوير</div>
                         </div>
                     `;
                     // تهيئة مؤشر الصورة الحالي
@@ -861,7 +900,7 @@
 
             const img = document.getElementById(`img-${id}`);
             if (!img) return;
-            
+
             // لا نبدأ التشغيل التلقائي إذا كان المستخدم يسحب
             if (isDragging) return;
 
@@ -940,7 +979,8 @@
             if (existing) {
                 existing.quantity++;
             } else {
-                cart.push({ ...product, quantity: 1 });
+                cart.push({ ...product,
+                    quantity: 1 });
             }
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCartIconCount();
@@ -1044,10 +1084,11 @@
             cart.forEach((item, index) => {
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
-                message += `${index+1}. ${item.name} | ك: ${item.quantity} | ${itemTotal} ج.م\n`;
+                message += `${index + 1}. ${item.name} | ك: ${item.quantity} | ${itemTotal} ج.م\n`;
             });
             message += `----------------------------------\n💰 *الإجمالي:* ${total} ج.م`;
-            window.open(`https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`, '_blank');
+            window.open(`https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`,
+                '_blank');
             cart = [];
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCartIconCount();
@@ -1065,14 +1106,18 @@
             e.preventDefault();
             document.getElementById('privacyModal').classList.add('open');
         }
+
         function closePrivacyPolicy() {
             document.getElementById('privacyModal').classList.remove('open');
         }
 
-        window.onload = function () {
+        window.onload = function() {
             displayProducts(allProducts);
             updateCartIconCount();
         };
     </script>
+</body>
+
+</html>
 </body>
 </html>

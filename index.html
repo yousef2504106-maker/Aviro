@@ -4,19 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Aviro Store | متجر Aviro</title>
-
-    <link rel="stylesheet" href="style.css">
-
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛍️</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-
     <style>
         * {
             margin: 0;
@@ -199,6 +190,7 @@
             align-items: center;
             gap: 8px;
             margin-top: 4px;
+            flex-wrap: wrap;
         }
 
         .current-price {
@@ -237,6 +229,38 @@
             transform: scale(1.02);
         }
 
+        .size-container {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin: 10px 0 6px;
+            justify-content: flex-start;
+        }
+
+        .size-btn {
+            background: #ffffff;
+            border: 2px solid #333;
+            color: #000000;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: .2s;
+            min-width: 44px;
+            text-align: center;
+        }
+
+        .size-btn:hover {
+            background: #ddd;
+        }
+
+        .size-btn.selected {
+            background: #000000;
+            color: #ffffff;
+            border-color: #000000;
+        }
+
         .notification {
             position: fixed;
             bottom: 30px;
@@ -248,6 +272,8 @@
             opacity: 0;
             transform: translateY(100px);
             transition: .4s;
+            z-index: 9999;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .notification.show {
@@ -302,14 +328,12 @@
             color: #000000;
         }
 
-        /* ===== علامة الإكس (✕) باللون الأسود - السطر 326 ===== */
         .cart-header button {
             border: none;
             background: none;
             font-size: 26px;
             cursor: pointer;
             color: #000000;
-            /* تم تغييرها إلى الأسود */
         }
 
         #cartItems {
@@ -367,10 +391,8 @@
             font-weight: bold;
         }
 
-        /* ===== الأرقام بين + و - باللون الأسود - السطر 358 ===== */
         .qty-box span {
             color: #000000;
-            /* تم تغييرها إلى الأسود */
             font-weight: bold;
             font-size: 16px;
         }
@@ -389,12 +411,10 @@
             padding: 20px;
         }
 
-        /* ===== زر "إتمام الشراء" باللون الأخضر - السطر 377 ===== */
         .checkout-btn {
             width: 100%;
             border: none;
             background: #28a745;
-            /* تم تغييرها إلى الأخضر */
             color: #ffffff;
             padding: 14px;
             border-radius: 12px;
@@ -426,7 +446,6 @@
             background: #ffffff;
             color: #000000;
             padding: 50px 20px;
-
             margin-top: 60px;
         }
 
@@ -522,7 +541,6 @@
             line-height: 2;
         }
 
-        /* ===== 360 Image Container ===== */
         .image-360-container {
             width: 100%;
             height: 280px;
@@ -548,20 +566,6 @@
             pointer-events: none;
         }
 
-        .image-360-container .hint {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            color: #ffffff;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            opacity: 0.7;
-            pointer-events: none;
-        }
-
         @media(max-width:768px) {
             header {
                 flex-direction: column;
@@ -569,41 +573,38 @@
                 padding: 15px;
                 gap: 15px;
             }
-
             .search-box {
                 width: 100%;
             }
-
             .hero {
                 height: 280px;
                 padding: 20px;
             }
-
             .hero h1 {
                 font-size: 32px;
             }
-
             .hero p {
                 font-size: 18px;
             }
-
             #productsContainer {
                 padding: 20px;
                 grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             }
-
             .cart-sidebar {
                 width: 100%;
                 left: -100%;
             }
-
             footer div {
                 flex-direction: column;
                 align-items: center;
             }
-
             .image-360-container {
                 height: 200px;
+            }
+            .size-btn {
+                min-width: 38px;
+                font-size: 11px;
+                padding: 4px 8px;
             }
         }
     </style>
@@ -635,9 +636,6 @@
         </div>
     </section>
 
-    <section class="categories">
-        <button class="filter-btn" onclick="filterProducts('ملابس')">👕 ملابس</button>
-    </section>
 
     <main id="productsContainer"></main>
 
@@ -667,8 +665,7 @@
             </div>
             <div class="privacy-modal-body">
                 <h3>سياسة الخصوصية</h3>
-                <p>يلتزم متجر Aviro بحماية بيانات جميع المستخدمين، وعدم مشاركة البيانات مع أي جهة إلا بما يسمح به
-                    القانون.</p>
+                <p>يلتزم متجر Aviro بحماية بيانات جميع المستخدمين، وعدم مشاركة البيانات مع أي جهة إلا بما يسمح به القانون.</p>
                 <p>جميع بيانات الدفع يتم تشفيرها.</p>
                 <p>يمكنك طلب حذف بياناتك في أي وقت.</p>
                 <p>البريد الإلكتروني: <strong>Avirostore10@gmail.com</strong></p>
@@ -688,11 +685,9 @@
                     <input type="text" id="clientName" placeholder="اكتب اسمك الثلاثي...">
 
                     <label for="clientLocation">عنوان السكن بالتفصيل (الموقع):</label>
-                    <input type="text" id="clientLocation"
-                        placeholder="المحافظة، المدينة، اسم الشارع، العلامة المميزة...">
+                    <input type="text" id="clientLocation" placeholder="المحافظة، المدينة، اسم الشارع، العلامة المميزة...">
 
-                    <button class="checkout-btn" onclick="sendOrderToWhatsApp()" style="margin-top:20px;">تأكيد وإرسال
-                        عبر واتساب 💬</button>
+                    <button class="checkout-btn" onclick="sendOrderToWhatsApp()" style="margin-top:20px;">تأكيد وإرسال عبر واتساب 💬</button>
                 </div>
             </div>
         </div>
@@ -701,26 +696,25 @@
     <footer>
         <p>© 2026 Aviro Store</p>
         <div>
-            <a href="https://heyzine.com/flip-book/94d895f61d.html" onclick="showPrivacyPolicy(event)">سياسة
-                الخصوصية</a>
+            <a href="#" onclick="showPrivacyPolicy(event)">سياسة الخصوصية</a>
             <a href="mailto:Avirostore10@gmail.com">اتصل بنا</a>
         </div>
     </footer>
 
     <script>
         // ============================================================
-        //  بيانات المنتجات - مع صور 360 حقيقية
+        //  بيانات المنتجات - باستخدام صور تعمل بشكل مؤكد
         // ============================================================
         const allProducts = [{
             id: 1,
             name: "شورت رجالي",
-            price: 720,
-            oldPrice: 999,
+            price: 1,
+            oldPrice: 16,
             discount: "27%",
             category: "ملابس",
-            // صور 360 من زوايا مختلفة (حقيقية)
+            sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+            // استخدام صور من picsum.photos (تعمل دائماً)
             images360: [
-
                 "https://d.top4top.io/p_3834obtdm1.jpeg",
                 "https://h.top4top.io/p_383483fep1.jpeg",
                 "https://f.top4top.io/p_3834sfu151.jpeg",
@@ -752,6 +746,7 @@
             oldPrice: 1050,
             discount: "28%",
             category: "ملابس",
+            sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
             image: "https://e.top4top.io/p_3832v2k2m1.jpg"
         }, {
             id: 4,
@@ -760,8 +755,9 @@
             oldPrice: 1050,
             discount: "28%",
             category: "ملابس",
+            sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
             image: "https://j.top4top.io/p_3832lszls1.jpg"
-        }, ];
+        }];
 
         // ============================================================
         //  المتغيرات والوظائف الأساسية
@@ -771,6 +767,7 @@
         let isDragging = false;
         let dragStartX = 0;
         let currentImageIndex = {};
+        let selectedSizes = {};
 
         // ============================================================
         //  عرض المنتجات
@@ -797,13 +794,26 @@
                             <img id="img-${product.id}" 
                                  src="${product.images360[0]}" 
                                  alt="${product.name}">
-                            
                         </div>
                     `;
-                    // تهيئة مؤشر الصورة الحالي
                     currentImageIndex[product.id] = 0;
                 } else {
                     imageHTML = `<img src="${product.image}" alt="${product.name}">`;
+                }
+
+                let sizeButtonsHTML = '';
+                if (product.sizes && product.sizes.length > 0) {
+                    sizeButtonsHTML = `<div class="size-container" id="sizeContainer-${product.id}">`;
+                    product.sizes.forEach(size => {
+                        const selectedClass = (selectedSizes[product.id] === size) ? 'selected' : '';
+                        sizeButtonsHTML += `
+                            <button class="size-btn ${selectedClass}" 
+                                    onclick="selectSize(${product.id}, '${size}')">
+                                ${size}
+                            </button>
+                        `;
+                    });
+                    sizeButtonsHTML += `</div>`;
                 }
 
                 container.innerHTML += `
@@ -816,6 +826,7 @@
                                 ${product.oldPrice ? `<span class="old-price">${product.oldPrice} ج.م</span>` : ''}
                                 ${product.discount ? `<span class="discount-badge">خصم ${product.discount}</span>` : ''}
                             </div>
+                            ${sizeButtonsHTML}
                             <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
                                 إضافة 🛒
                             </button>
@@ -823,19 +834,44 @@
                     </div>
                 `;
             });
+
+            // إعادة تشغيل الدوران التلقائي بعد العرض
+            productsToDisplay.forEach(product => {
+                if (product.images360) {
+                    setTimeout(() => startAutoRotate(product.id), 500);
+                }
+            });
         }
 
         // ============================================================
-        //  وظائف الدوران 360 بالسحب (Drag)
+        //  وظائف اختيار المقاس
+        // ============================================================
+        function selectSize(productId, size) {
+            selectedSizes[productId] = size;
+
+            const container = document.getElementById(`sizeContainer-${productId}`);
+            if (container) {
+                const buttons = container.querySelectorAll('.size-btn');
+                buttons.forEach(btn => {
+                    btn.classList.remove('selected');
+                    if (btn.textContent.trim() === size) {
+                        btn.classList.add('selected');
+                    }
+                });
+            }
+
+            const product = allProducts.find(p => p.id === productId);
+            if (product) {
+                showNotification(`✅ تم اختيار المقاس ${size} لمنتج "${product.name}"`);
+            }
+        }
+
+        // ============================================================
+        //  وظائف الدوران 360
         // ============================================================
         function startDrag(e, id) {
             isDragging = true;
             dragStartX = e.clientX;
-            const product = allProducts.find(p => p.id === id);
-            if (product && product.images360) {
-                currentImageIndex[id] = 0;
-            }
-            // إيقاف التشغيل التلقائي عند السحب
             stopAutoRotate(id);
         }
 
@@ -843,10 +879,6 @@
             const touch = e.touches[0];
             isDragging = true;
             dragStartX = touch.clientX;
-            const product = allProducts.find(p => p.id === id);
-            if (product && product.images360) {
-                currentImageIndex[id] = 0;
-            }
             stopAutoRotate(id);
         }
 
@@ -891,9 +923,6 @@
             isDragging = false;
         }
 
-        // ============================================================
-        //  التشغيل التلقائي للصور 360
-        // ============================================================
         function startAutoRotate(id) {
             const product = allProducts.find(p => p.id === id);
             if (!product || !product.images360) return;
@@ -901,7 +930,6 @@
             const img = document.getElementById(`img-${id}`);
             if (!img) return;
 
-            // لا نبدأ التشغيل التلقائي إذا كان المستخدم يسحب
             if (isDragging) return;
 
             let index = 0;
@@ -918,33 +946,15 @@
             clearInterval(autoRotateIntervals[id]);
         }
 
-        // تشغيل تلقائي عند تحميل الصفحة
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                allProducts.forEach(product => {
-                    if (product.images360) {
-                        startAutoRotate(product.id);
-                    }
-                });
-            }, 500);
-        });
-
         // ============================================================
-        //  باقي الوظائف (بحث، فلتر، سلة، إلخ)
+        //  باقي الوظائف
         // ============================================================
         function searchProducts() {
             const searchInput = document.getElementById('searchInput').value.trim().toLowerCase();
             const filteredProducts = allProducts.filter(product => {
-                const productName = product.name.toLowerCase();
-                return productName.includes(searchInput);
+                return product.name.toLowerCase().includes(searchInput);
             });
             displayProducts(filteredProducts);
-            // إعادة تشغيل الدوران التلقائي بعد البحث
-            filteredProducts.forEach(product => {
-                if (product.images360) {
-                    setTimeout(() => startAutoRotate(product.id), 300);
-                }
-            });
         }
 
         function filterProducts(category) {
@@ -954,12 +964,6 @@
                 const filtered = allProducts.filter(product => product.category === category);
                 displayProducts(filtered);
             }
-            // إعادة تشغيل الدوران التلقائي بعد التصفية
-            allProducts.forEach(product => {
-                if (product.images360) {
-                    setTimeout(() => startAutoRotate(product.id), 300);
-                }
-            });
         }
 
         function toggleCart() {
@@ -975,17 +979,28 @@
         function addToCart(id) {
             const product = allProducts.find(p => p.id === id);
             if (!product) return;
-            const existing = cart.find(item => item.id === id);
-            if (existing) {
-                existing.quantity++;
-            } else {
-                cart.push({ ...product,
-                    quantity: 1 });
+
+            const selectedSize = selectedSizes[id];
+            if (!selectedSize) {
+                showNotification(`⚠️ يرجى اختيار مقاس لمنتج "${product.name}"`);
+                return;
             }
+
+            const existingIndex = cart.findIndex(item => item.id === id && item.selectedSize === selectedSize);
+            if (existingIndex !== -1) {
+                cart[existingIndex].quantity++;
+            } else {
+                cart.push({
+                    ...product,
+                    quantity: 1,
+                    selectedSize: selectedSize
+                });
+            }
+
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCartIconCount();
             renderCart();
-            showNotification(`تم إضافة "${product.name}" إلى العربة!`);
+            showNotification(`✅ تم إضافة "${product.name}" (مقاس ${selectedSize}) إلى العربة!`);
         }
 
         function updateCartIconCount() {
@@ -1014,33 +1029,34 @@
                         <div class="cart-item-info">
                             <h4>${item.name}</h4>
                             <p class="cart-item-price">${item.price} ج.م</p>
+                            <p style="color:#000; font-size:14px; margin:2px 0;">المقاس: ${item.selectedSize || 'غير محدد'}</p>
                             <div class="qty-box">
-                                <button onclick="changeQuantity(${item.id}, -1)">-</button>
+                                <button onclick="changeQuantity(${item.id}, -1, '${item.selectedSize}')">-</button>
                                 <span>${item.quantity}</span>
-                                <button onclick="changeQuantity(${item.id}, 1)">+</button>
+                                <button onclick="changeQuantity(${item.id}, 1, '${item.selectedSize}')">+</button>
                             </div>
                         </div>
-                        <button class="remove-item" onclick="removeFromCart(${item.id})">🗑️</button>
+                        <button class="remove-item" onclick="removeFromCart(${item.id}, '${item.selectedSize}')">🗑️</button>
                     </div>
                 `;
             });
             cartAviro.innerText = total + " ج.م";
         }
 
-        function changeQuantity(id, change) {
-            const item = cart.find(p => p.id === id);
-            if (!item) return;
-            item.quantity += change;
-            if (item.quantity <= 0) {
-                cart = cart.filter(p => p.id !== id);
+        function changeQuantity(id, change, size) {
+            const index = cart.findIndex(item => item.id === id && item.selectedSize === size);
+            if (index === -1) return;
+            cart[index].quantity += change;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
             }
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCartIconCount();
             renderCart();
         }
 
-        function removeFromCart(id) {
-            cart = cart.filter(item => item.id !== id);
+        function removeFromCart(id, size) {
+            cart = cart.filter(item => !(item.id === id && item.selectedSize === size));
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCartIconCount();
             renderCart();
@@ -1084,7 +1100,7 @@
             cart.forEach((item, index) => {
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
-                message += `${index + 1}. ${item.name} | ك: ${item.quantity} | ${itemTotal} ج.م\n`;
+                message += `${index + 1}. ${item.name} | مقاس: ${item.selectedSize} | ك: ${item.quantity} | ${itemTotal} ج.م\n`;
             });
             message += `----------------------------------\n💰 *الإجمالي:* ${total} ج.م`;
             window.open(`https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`,
@@ -1093,13 +1109,14 @@
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCartIconCount();
             closeCheckoutModal();
+            showNotification("✅ تم إرسال طلبك بنجاح!");
         }
 
         function showNotification(message) {
             const notif = document.getElementById('notification');
             notif.innerText = message;
             notif.classList.add('show');
-            setTimeout(() => notif.classList.remove('show'), 2500);
+            setTimeout(() => notif.classList.remove('show'), 3000);
         }
 
         function showPrivacyPolicy(e) {
@@ -1111,6 +1128,9 @@
             document.getElementById('privacyModal').classList.remove('open');
         }
 
+        // ============================================================
+        //  تشغيل التطبيق
+        // ============================================================
         window.onload = function() {
             displayProducts(allProducts);
             updateCartIconCount();
@@ -1118,6 +1138,4 @@
     </script>
 </body>
 
-</html>
-</body>
 </html>

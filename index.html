@@ -8,6 +8,37 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script type="module">
+        // استيراد Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+        
+        // إعداد Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDenPZuzh0U-7XZ1gAiiHDqit7SKCV276M",
+            authDomain: "aviro-store.firebaseapp.com",
+            projectId: "aviro-store",
+            storageBucket: "aviro-store.firebasestorage.app",
+            messagingSenderId: "272519712873",
+            appId: "1:272519712873:web:047f9baece0d153339d2f8",
+            measurementId: "G-M00WWV0FEH"
+        };
+
+        // تهيئة Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // جعل auth متاحاً عالمياً
+        window.auth = auth;
+        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+        window.onAuthStateChanged = onAuthStateChanged;
+        window.signOut = signOut;
+
+        console.log('✅ Firebase initialized successfully!');
+    </script>
+
     <style>
         * {
             margin: 0;
@@ -25,6 +56,212 @@
             color: #ffffff;
         }
 
+        /* ---------- تسجيل الدخول (Login Screen) ---------- */
+        #loginScreen {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            backdrop-filter: blur(10px);
+            transition: opacity 0.6s ease;
+        }
+
+        #loginScreen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .login-box {
+            background: #0a0a0a;
+            padding: 50px 40px;
+            border-radius: 30px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
+            text-align: center;
+            border: 1px solid #2a2a2a;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            20% {
+                transform: translateX(-15px);
+            }
+            40% {
+                transform: translateX(15px);
+            }
+            60% {
+                transform: translateX(-10px);
+            }
+            80% {
+                transform: translateX(10px);
+            }
+        }
+
+        .login-box .logo-img {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            border-radius: 50%;
+            background: #fff;
+            padding: 10px;
+            border: 3px solid #333;
+        }
+
+        .login-box h2 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            color: #fff;
+            letter-spacing: 1px;
+            font-weight: 800;
+        }
+
+        .login-box .subtitle {
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 16px 22px;
+            margin-bottom: 18px;
+            border-radius: 30px;
+            border: 2px solid #2a2a2a;
+            background: #141414;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+            text-align: right;
+        }
+
+        .login-box input:focus {
+            border-color: #ffffff;
+            background: #1a1a1a;
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.05);
+        }
+
+        .login-box input::placeholder {
+            color: #555;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 19px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background: #cccccc;
+            transform: scale(1.02);
+        }
+
+        .login-btn:active {
+            transform: scale(0.98);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-error {
+            color: #ff6b6b;
+            font-size: 14px;
+            margin-top: 16px;
+            display: none;
+            background: rgba(255, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
+        .login-success {
+            color: #51cf66;
+            font-size: 14px;
+            margin-top: 16px;
+            display: none;
+            background: rgba(81, 207, 102, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(81, 207, 102, 0.2);
+        }
+
+        .login-success.show {
+            display: block;
+        }
+
+        .login-box .hint {
+            color: #444;
+            font-size: 13px;
+            margin-top: 25px;
+            border-top: 1px solid #1a1a1a;
+            padding-top: 20px;
+        }
+
+        .login-box .hint span {
+            color: #888;
+            font-weight: 600;
+            background: #1a1a1a;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin: 0 4px;
+            display: inline-block;
+        }
+
+        .login-box .register-link {
+            color: #888;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+
+        .login-box .register-link a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .login-box .register-link a:hover {
+            color: #cccccc;
+            text-decoration: underline;
+        }
+
+        /* ---------- باقي التنسيقات ---------- */
         header {
             position: sticky;
             top: 0;
@@ -35,7 +272,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 40px;
-            box-shadow: 0 2px 12px rgb(255, 255, 255);
+            box-shadow: 0 2px 12px rgba(255, 255, 255, 0.1);
             z-index: 1000;
         }
 
@@ -78,23 +315,42 @@
         .header-buttons {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
         .header-buttons button {
             background: #ffffff;
             color: #000000;
             border: none;
-            padding: 12px 20px;
+            padding: 10px 18px;
             border-radius: 30px;
             cursor: pointer;
             font-weight: bold;
             transition: .3s;
+            font-size: 14px;
         }
 
         .header-buttons button:hover {
             background: #717171;
             transform: translateY(-2px);
+        }
+
+        .header-buttons .logout-btn {
+            background: #ff4444;
+            color: #fff;
+        }
+
+        .header-buttons .logout-btn:hover {
+            background: #cc0000;
+        }
+
+        .header-buttons .user-email {
+            color: #fff;
+            font-size: 13px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .hero {
@@ -159,7 +415,7 @@
             border-radius: 18px;
             overflow: hidden;
             transition: .3s;
-            box-shadow: 0 6px 18px rgb(0, 55, 255);
+            box-shadow: 0 6px 18px rgba(0, 55, 255, 0.3);
         }
 
         .product-card:hover {
@@ -267,13 +523,14 @@
             right: 30px;
             background: #ffffff;
             color: rgb(0, 0, 0);
-            padding: 18px;
+            padding: 18px 24px;
             border-radius: 12px;
             opacity: 0;
             transform: translateY(100px);
             transition: .4s;
             z-index: 9999;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            font-weight: 600;
         }
 
         .notification.show {
@@ -306,7 +563,7 @@
             background: #ffffff;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 0 30px rgb(0, 0, 0);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
             transition: .4s;
             z-index: 1000;
         }
@@ -346,7 +603,7 @@
             display: flex;
             gap: 12px;
             margin-bottom: 18px;
-            border-bottom: 1px solid #000000;
+            border-bottom: 1px solid #e0e0e0;
             padding-bottom: 15px;
             align-items: center;
         }
@@ -356,7 +613,7 @@
             height: 70px;
             object-fit: contain;
             border-radius: 10px;
-            background: #ffffff;
+            background: #f5f5f5;
         }
 
         .cart-item-info {
@@ -389,6 +646,12 @@
             border-radius: 50%;
             cursor: pointer;
             font-weight: bold;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .qty-box button:hover {
+            background: #777;
         }
 
         .qty-box span {
@@ -407,7 +670,7 @@
         }
 
         .cart-footer {
-            border-top: 1px solid #000000;
+            border-top: 1px solid #e0e0e0;
             padding: 20px;
         }
 
@@ -421,6 +684,7 @@
             cursor: pointer;
             font-size: 17px;
             margin-top: 15px;
+            font-weight: bold;
         }
 
         .checkout-btn:hover {
@@ -436,6 +700,7 @@
             padding: 12px;
             border-radius: 12px;
             cursor: pointer;
+            font-weight: bold;
         }
 
         .clear-cart-btn:hover {
@@ -447,6 +712,7 @@
             color: #000000;
             padding: 50px 20px;
             margin-top: 60px;
+            border-top: 1px solid #e0e0e0;
         }
 
         footer p {
@@ -468,7 +734,7 @@
         }
 
         footer a:hover {
-            color: #000000;
+            color: #555;
         }
 
         .privacy-modal {
@@ -477,8 +743,9 @@
             display: none;
             justify-content: center;
             align-items: center;
-            background: rgba(255, 255, 255, 0.55);
+            background: rgba(0, 0, 0, 0.7);
             z-index: 2000;
+            backdrop-filter: blur(4px);
         }
 
         .privacy-modal.open {
@@ -492,14 +759,39 @@
             overflow: auto;
             background: #000000;
             border-radius: 20px;
+            border: 1px solid #333;
         }
 
         .privacy-modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgb(125, 125, 125);
+            background: #1a1a1a;
             padding: 20px;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .privacy-modal-header h2 {
+            color: #fff;
+        }
+
+        .privacy-modal-header button {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        .privacy-modal-body {
+            padding: 25px;
+            line-height: 2;
+            color: #ccc;
+        }
+
+        .privacy-modal-body h3 {
+            color: #fff;
+            margin-bottom: 10px;
         }
 
         .checkout-box {
@@ -513,32 +805,26 @@
         .checkout-box label {
             font-weight: bold;
             font-size: 15px;
+            color: #ddd;
         }
 
         .checkout-box input {
-            padding: 12px;
-            border: 1px solid #ffffff;
+            padding: 12px 16px;
+            border: 1px solid #333;
             border-radius: 12px;
-            background: #959595;
+            background: #141414;
             color: #ffffff;
             font-size: 16px;
             width: 100%;
+            outline: none;
         }
 
         .checkout-box input:focus {
-            outline: 2px solid #000000;
+            border-color: #ffffff;
         }
 
-        .privacy-modal-header button {
-            background: none;
-            border: none;
-            font-size: 28px;
-            cursor: pointer;
-        }
-
-        .privacy-modal-body {
-            padding: 25px;
-            line-height: 2;
+        .checkout-box input::placeholder {
+            color: #666;
         }
 
         .image-360-container {
@@ -564,6 +850,24 @@
             background: #ffffff;
             user-select: none;
             pointer-events: none;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: #000;
+            animation: spin 0.8s ease infinite;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         @media(max-width:768px) {
@@ -606,104 +910,220 @@
                 font-size: 11px;
                 padding: 4px 8px;
             }
+            .login-box {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+            .header-buttons button {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+            .header-buttons .user-email {
+                font-size: 11px;
+                padding: 5px 10px;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #777;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="overlay" id="overlay" onclick="toggleCart()"></div>
+    <!-- ============================================================ -->
+    <!-- شاشة تسجيل الدخول -->
+    <!-- ============================================================ -->
+    <div id="loginScreen">
+        <div class="login-box">
+            <img src="https://g.top4top.io/p_38369skks1.jpeg" alt="Aviro Logo" class="logo-img">
+            <h2>🔐 Aviro Store</h2>
+            <p class="subtitle">تسجيل الدخول للوصول إلى المتجر</p>
 
-    <header>
-        <div class="logo">
-            <img src="https://g.top4top.io/p_38369skks1.jpeg" alt="Aviro Logo">
-            <span>AVIRO</span>
-        </div>
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="ابحث عن أي منتج..." onkeyup="searchProducts()">
-        </div>
-        <div class="header-buttons">
-            <button onclick="toggleCart()">
-                🛒 <span id="CartCount">0</span>
-            </button>
-        </div>
-    </header>
+            <input type="email" id="loginEmail" placeholder="✉️ البريد الإلكتروني" >
+            <input type="password" id="loginPassword" placeholder="🔑 كلمة المرور" >
 
-    <section class="hero">
-        <div class="hero-text">
-            <h1>أهلاً بك في متجر Aviro</h1>
-            <p>أفضل العروض والمنتجات بأفضل الأسعار.</p>
-        </div>
-    </section>
+            <button class="login-btn" id="loginBtn">دخول 🚀</button>
+            
+            <div id="loginError" class="login-error">⚠️ البريد الإلكتروني أو كلمة المرور غير صحيحة</div>
+            <div id="loginSuccess" class="login-success">✅ تم تسجيل الدخول بنجاح!</div>
 
-
-    <main id="productsContainer"></main>
-
-    <aside class="cart-sidebar" id="cartSidebar">
-        <div class="cart-header">
-            <h2>عربة التسوق</h2>
-            <button onclick="toggleCart()">✕</button>
-        </div>
-        <div id="cartItems">
-            <p class="empty-cart-msg">لا توجد منتجات.</p>
-        </div>
-        <div class="cart-footer">
-            <h3>الإجمالي</h3>
-            <h2 id="cartAviro">0 ج.م</h2>
-            <button class="checkout-btn" onclick="checkout()">إتمام الشراء</button>
-            <button class="clear-cart-btn" onclick="clearCart()">تفريغ العربة</button>
-        </div>
-    </aside>
-
-    <div id="notification" class="notification"></div>
-
-    <div id="privacyModal" class="privacy-modal">
-        <div class="privacy-modal-content">
-            <div class="privacy-modal-header">
-                <h2>سياسة الخصوصية</h2>
-                <button onclick="closePrivacyPolicy()">✕</button>
-            </div>
-            <div class="privacy-modal-body">
-                <h3>سياسة الخصوصية</h3>
-                <p>يلتزم متجر Aviro بحماية بيانات جميع المستخدمين، وعدم مشاركة البيانات مع أي جهة إلا بما يسمح به القانون.</p>
-                <p>جميع بيانات الدفع يتم تشفيرها.</p>
-                <p>يمكنك طلب حذف بياناتك في أي وقت.</p>
-                <p>البريد الإلكتروني: <strong>Avirostore10@gmail.com</strong></p>
+            <div class="register-link">
+                ليس لديك حساب؟ <a href="#" onclick="showRegister()">سجل الآن</a>
             </div>
         </div>
     </div>
 
-    <div id="checkoutModal" class="privacy-modal">
-        <div class="privacy-modal-content">
-            <div class="privacy-modal-header">
-                <h2>بيانات الشحن والتوصيل</h2>
-                <button onclick="closeCheckoutModal()">✕</button>
+    <!-- ============================================================ -->
+    <!-- شاشة التسجيل (Register) -->
+    <!-- ============================================================ -->
+    <div id="registerScreen" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 99998; backdrop-filter: blur(10px); justify-content: center; align-items: center;">
+        <div class="login-box">
+            <img src="https://g.top4top.io/p_38369skks1.jpeg" alt="Aviro Logo" class="logo-img">
+            <h2>📝 إنشاء حساب</h2>
+            <p class="subtitle">سجل الآن للاستمتاع بتجربة التسوق</p>
+
+            <input type="email" id="registerEmail" placeholder="✉️ البريد الإلكتروني">
+            <input type="password" id="registerPassword" placeholder="🔑 كلمة المرور (6 أحرف على الأقل)">
+            <input type="password" id="registerConfirmPassword" placeholder="🔑 تأكيد كلمة المرور">
+
+            <button class="login-btn" id="registerBtn">إنشاء حساب ✨</button>
+            
+            <div id="registerError" class="login-error"></div>
+            <div id="registerSuccess" class="login-success"></div>
+
+            <div class="register-link">
+                لديك حساب بالفعل؟ <a href="#" onclick="showLogin()">تسجيل الدخول</a>
             </div>
-            <div class="privacy-modal-body">
-                <div class="checkout-box">
-                    <label for="clientName">الاسم بالكامل:</label>
-                    <input type="text" id="clientName" placeholder="اكتب اسمك الثلاثي...">
+        </div>
+    </div>
 
-                    <label for="clientLocation">عنوان السكن بالتفصيل (الموقع):</label>
-                    <input type="text" id="clientLocation" placeholder="المحافظة، المدينة، اسم الشارع، العلامة المميزة...">
+    <!-- ============================================================ -->
+    <!-- المحتوى الرئيسي (يظهر فقط بعد تسجيل الدخول) -->
+    <!-- ============================================================ -->
+    <div id="mainContent" style="display: none;">
 
-                    <button class="checkout-btn" onclick="sendOrderToWhatsApp()" style="margin-top:20px;">تأكيد وإرسال عبر واتساب 💬</button>
+        <div class="overlay" id="overlay" onclick="toggleCart()"></div>
+
+        <header>
+            <div class="logo">
+                <img src="https://g.top4top.io/p_38369skks1.jpeg" alt="Aviro Logo">
+                <span>AVIRO</span>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="ابحث عن أي منتج..." onkeyup="searchProducts()">
+            </div>
+            <div class="header-buttons">
+                <span class="user-email" id="userEmailDisplay">user@email.com</span>
+                <button onclick="toggleCart()">
+                    🛒 <span id="CartCount">0</span>
+                </button>
+                <button class="logout-btn" onclick="handleLogout()">🚪 خروج</button>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="hero-text">
+                <h1>أهلاً بك في متجر Aviro</h1>
+                <p>أفضل العروض والمنتجات بأفضل الأسعار.</p>
+            </div>
+        </section>
+
+       
+        <main id="productsContainer"></main>
+
+        <aside class="cart-sidebar" id="cartSidebar">
+            <div class="cart-header">
+                <h2>🛒 عربة التسوق</h2>
+                <button onclick="toggleCart()">✕</button>
+            </div>
+            <div id="cartItems">
+                <p class="empty-cart-msg" style="text-align:center; padding:30px; color:#888;">لا توجد منتجات في العربة</p>
+            </div>
+            <div class="cart-footer">
+                <h3 style="color:#000;">الإجمالي</h3>
+                <h2 id="cartAviro" style="color:#000;">0 ج.م</h2>
+                <button class="checkout-btn" onclick="checkout()">إتمام الشراء</button>
+                <button class="clear-cart-btn" onclick="clearCart()">تفريغ العربة</button>
+            </div>
+        </aside>
+
+        <div id="notification" class="notification"></div>
+
+        <div id="privacyModal" class="privacy-modal">
+            <div class="privacy-modal-content">
+                <div class="privacy-modal-header">
+                    <h2>سياسة الخصوصية</h2>
+                    <button onclick="closePrivacyPolicy()">✕</button>
+                </div>
+                <div class="privacy-modal-body">
+                    <h3>سياسة الخصوصية</h3>
+                    <p>يلتزم متجر Aviro بحماية بيانات جميع المستخدمين، وعدم مشاركة البيانات مع أي جهة إلا بما يسمح به القانون.</p>
+                    <p>جميع بيانات الدفع يتم تشفيرها باستخدام تقنيات آمنة.</p>
+                    <p>يمكنك طلب حذف بياناتك في أي وقت عبر التواصل معنا.</p>
+                    <p>البريد الإلكتروني: <strong style="color:#fff;">Avirostore10@gmail.com</strong></p>
                 </div>
             </div>
         </div>
+
+        <div id="checkoutModal" class="privacy-modal">
+            <div class="privacy-modal-content">
+                <div class="privacy-modal-header">
+                    <h2>بيانات الشحن والتوصيل</h2>
+                    <button onclick="closeCheckoutModal()">✕</button>
+                </div>
+                <div class="privacy-modal-body">
+                    <div class="checkout-box">
+                        <label for="clientName">👤 الاسم بالكامل:</label>
+                        <input type="text" id="clientName" placeholder="اكتب اسمك الثلاثي...">
+                        <label for="clientLocation">📍 عنوان السكن بالتفصيل:</label>
+                        <input type="text" id="clientLocation" placeholder="المحافظة، المدينة، الشارع، العلامة المميزة...">
+                        <label for="clientPhone">📱 رقم الهاتف:</label>
+                        <input type="text" id="clientPhone" placeholder="مثال: 01012345678">
+                        <button class="checkout-btn" onclick="sendOrderToWhatsApp()" style="margin-top:20px;">تأكيد وإرسال عبر واتساب 💬</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2026 Aviro Store. جميع الحقوق محفوظة</p>
+            <div>
+                <a href="#" onclick="showPrivacyPolicy(event)">سياسة الخصوصية</a>
+                <a href="mailto:Avirostore10@gmail.com">📧 اتصل بنا</a>
+            </div>
+        </footer>
     </div>
 
-    <footer>
-        <p>© 2026 Aviro Store</p>
-        <div>
-            <a href="#" onclick="showPrivacyPolicy(event)">سياسة الخصوصية</a>
-            <a href="mailto:Avirostore10@gmail.com">اتصل بنا</a>
-        </div>
-    </footer>
-
-    <script>
+    <script type="module">
         // ============================================================
-        //  بيانات المنتجات - باستخدام صور تعمل بشكل مؤكد
+        //  استيراد Firebase
+        // ============================================================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword, 
+            createUserWithEmailAndPassword,
+            onAuthStateChanged, 
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDenPZuzh0U-7XZ1gAiiHDqit7SKCV276M",
+            authDomain: "aviro-store.firebaseapp.com",
+            projectId: "aviro-store",
+            storageBucket: "aviro-store.firebasestorage.app",
+            messagingSenderId: "272519712873",
+            appId: "1:272519712873:web:047f9baece0d153339d2f8",
+            measurementId: "G-M00WWV0FEH"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // ============================================================
+        //  متغيرات
+        // ============================================================
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let autoRotateIntervals = {};
+        let isDragging = false;
+        let dragStartX = 0;
+        let currentImageIndex = {};
+        let selectedSizes = {};
+
+        // ============================================================
+        //  بيانات المنتجات
         // ============================================================
         const allProducts = [{
             id: 1,
@@ -713,7 +1133,6 @@
             discount: "27%",
             category: "ملابس",
             sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
-            // استخدام صور من picsum.photos (تعمل دائماً)
             images360: [
                 "https://d.top4top.io/p_3834obtdm1.jpeg",
                 "https://h.top4top.io/p_383483fep1.jpeg",
@@ -741,7 +1160,7 @@
             ]
         }, {
             id: 2,
-            name: "تيشيرت",
+            name: "تيشيرت كلاسيك",
             price: 756,
             oldPrice: 1050,
             discount: "28%",
@@ -749,8 +1168,8 @@
             sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
             image: "https://e.top4top.io/p_3832v2k2m1.jpg"
         }, {
-            id: 4,
-            name: "بنطلون",
+            id: 3,
+            name: "بنطلون جينز",
             price: 756,
             oldPrice: 1050,
             discount: "28%",
@@ -760,21 +1179,248 @@
         }];
 
         // ============================================================
-        //  المتغيرات والوظائف الأساسية
+        //  وظائف Firebase Auth
         // ============================================================
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        let autoRotateIntervals = {};
-        let isDragging = false;
-        let dragStartX = 0;
-        let currentImageIndex = {};
-        let selectedSizes = {};
+        
+        // تسجيل الدخول
+        window.handleLogin = async function() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const errorEl = document.getElementById('loginError');
+            const successEl = document.getElementById('loginSuccess');
+            const loginBtn = document.getElementById('loginBtn');
+
+            if (!email || !password) {
+                errorEl.textContent = '⚠️ يرجى إدخال البريد الإلكتروني وكلمة المرور';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            errorEl.classList.remove('show');
+            successEl.classList.remove('show');
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = 'جاري تسجيل الدخول... ⏳';
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                console.log('✅ تم تسجيل الدخول:', userCredential.user.email);
+                successEl.textContent = '✅ تم تسجيل الدخول بنجاح!';
+                successEl.classList.add('show');
+                
+                // سيتم التعامل مع التوجيه عبر onAuthStateChanged
+            } catch (error) {
+                console.error('❌ خطأ في تسجيل الدخول:', error.code, error.message);
+                let errorMessage = '⚠️ البريد الإلكتروني أو كلمة المرور غير صحيحة';
+                if (error.code === 'auth/user-not-found') {
+                    errorMessage = '⚠️ لا يوجد حساب بهذا البريد الإلكتروني';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMessage = '⚠️ كلمة المرور غير صحيحة';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = '⚠️ البريد الإلكتروني غير صحيح';
+                } else if (error.code === 'auth/too-many-requests') {
+                    errorMessage = '⚠️ تم حظر الحساب مؤقتاً. حاول لاحقاً';
+                }
+                errorEl.textContent = errorMessage;
+                errorEl.classList.add('show');
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = 'دخول 🚀';
+            }
+        };
+
+        // إنشاء حساب جديد
+        window.handleRegister = async function() {
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value.trim();
+            const confirmPassword = document.getElementById('registerConfirmPassword').value.trim();
+            const errorEl = document.getElementById('registerError');
+            const successEl = document.getElementById('registerSuccess');
+            const registerBtn = document.getElementById('registerBtn');
+
+            errorEl.classList.remove('show');
+            successEl.classList.remove('show');
+
+            if (!email || !password || !confirmPassword) {
+                errorEl.textContent = '⚠️ يرجى ملء جميع الحقول';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            if (password.length < 6) {
+                errorEl.textContent = '⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                errorEl.textContent = '⚠️ كلمة المرور غير متطابقة';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            registerBtn.disabled = true;
+            registerBtn.innerHTML = 'جاري إنشاء الحساب... ⏳';
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                console.log('✅ تم إنشاء الحساب:', userCredential.user.email);
+                successEl.textContent = '✅ تم إنشاء الحساب بنجاح! جاري تحويلك...';
+                successEl.classList.add('show');
+                
+                setTimeout(() => {
+                    showLogin();
+                }, 1500);
+            } catch (error) {
+                console.error('❌ خطأ في إنشاء الحساب:', error.code, error.message);
+                let errorMessage = '⚠️ حدث خطأ أثناء إنشاء الحساب';
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = '⚠️ هذا البريد الإلكتروني مستخدم بالفعل';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = '⚠️ البريد الإلكتروني غير صحيح';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = '⚠️ كلمة المرور ضعيفة. استخدم 6 أحرف على الأقل';
+                }
+                errorEl.textContent = errorMessage;
+                errorEl.classList.add('show');
+                registerBtn.disabled = false;
+                registerBtn.innerHTML = 'إنشاء حساب ✨';
+            }
+        };
+
+        // تسجيل الخروج
+        window.handleLogout = async function() {
+            if (confirm('هل تريد تسجيل الخروج؟')) {
+                try {
+                    await signOut(auth);
+                    console.log('✅ تم تسجيل الخروج');
+                    // سيتم التعامل مع التوجيه عبر onAuthStateChanged
+                } catch (error) {
+                    console.error('❌ خطأ في تسجيل الخروج:', error);
+                }
+            }
+        };
 
         // ============================================================
-        //  عرض المنتجات
+        //  مراقبة حالة المصادقة
+        // ============================================================
+        onAuthStateChanged(auth, (user) => {
+            const loginScreen = document.getElementById('loginScreen');
+            const mainContent = document.getElementById('mainContent');
+            const userEmailDisplay = document.getElementById('userEmailDisplay');
+
+            if (user) {
+                // المستخدم مسجل دخول
+                console.log('👤 مستخدم نشط:', user.email);
+                loginScreen.classList.add('hidden');
+                mainContent.style.display = 'block';
+                if (userEmailDisplay) {
+                    userEmailDisplay.textContent = user.email;
+                }
+                // تهيئة المتجر
+                displayProducts(allProducts);
+                updateCartIconCount();
+                showNotification('✅ مرحباً بك في متجر Aviro!');
+            } else {
+                // المستخدم غير مسجل دخول
+                console.log('👤 لا يوجد مستخدم نشط');
+                loginScreen.classList.remove('hidden');
+                mainContent.style.display = 'none';
+                // إعادة تعيين زر الدخول
+                const loginBtn = document.getElementById('loginBtn');
+                if (loginBtn) {
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = 'دخول 🚀';
+                }
+                // إيقاف الدوران
+                Object.keys(autoRotateIntervals).forEach(key => {
+                    clearInterval(autoRotateIntervals[key]);
+                });
+                autoRotateIntervals = {};
+                // إغلاق السلة
+                if (document.getElementById('cartSidebar')?.classList.contains('open')) {
+                    toggleCart();
+                }
+            }
+        });
+
+        // ============================================================
+        //  وظائف تبديل الشاشات
+        // ============================================================
+        window.showRegister = function() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('registerScreen').style.display = 'flex';
+            document.getElementById('registerError').classList.remove('show');
+            document.getElementById('registerSuccess').classList.remove('show');
+        };
+
+        window.showLogin = function() {
+            document.getElementById('registerScreen').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('loginError').classList.remove('show');
+            document.getElementById('loginSuccess').classList.remove('show');
+            const loginBtn = document.getElementById('loginBtn');
+            if (loginBtn) {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = 'دخول 🚀';
+            }
+        };
+
+        // ============================================================
+        //  ربط الأحداث
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // زر تسجيل الدخول
+            const loginBtn = document.getElementById('loginBtn');
+            if (loginBtn) {
+                loginBtn.addEventListener('click', window.handleLogin);
+            }
+
+            // زر إنشاء حساب
+            const registerBtn = document.getElementById('registerBtn');
+            if (registerBtn) {
+                registerBtn.addEventListener('click', window.handleRegister);
+            }
+
+            // مفتاح Enter في شاشة الدخول
+            document.getElementById('loginEmail')?.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') window.handleLogin();
+            });
+            document.getElementById('loginPassword')?.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') window.handleLogin();
+            });
+
+            // مفتاح Enter في شاشة التسجيل
+            document.getElementById('registerEmail')?.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') window.handleRegister();
+            });
+            document.getElementById('registerPassword')?.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') window.handleRegister();
+            });
+            document.getElementById('registerConfirmPassword')?.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') window.handleRegister();
+            });
+
+            // عرض شاشة الدخول افتراضياً
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('registerScreen').style.display = 'none';
+        });
+
+        // ============================================================
+        //  وظائف المنتجات (مستمرة كما هي)
         // ============================================================
         function displayProducts(productsToDisplay) {
             const container = document.getElementById('productsContainer');
+            if (!container) return;
             container.innerHTML = '';
+
+            if (productsToDisplay.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column:1/-1; text-align:center; padding:60px 20px; color:#888;">
+                        <h2 style="font-size:28px; margin-bottom:10px;">🔍 لا توجد منتجات</h2>
+                        <p>حاول تغيير كلمة البحث أو التصنيف</p>
+                    </div>
+                `;
+                return;
+            }
 
             productsToDisplay.forEach(product => {
                 const is360 = product.images360 && product.images360.length > 0;
@@ -791,9 +1437,7 @@
                              ontouchstart="startDragTouch(event, ${product.id})"
                              ontouchmove="dragRotateTouch(event, ${product.id})"
                              ontouchend="endDrag()">
-                            <img id="img-${product.id}" 
-                                 src="${product.images360[0]}" 
-                                 alt="${product.name}">
+                            <img id="img-${product.id}" src="${product.images360[0]}" alt="${product.name}">
                         </div>
                     `;
                     currentImageIndex[product.id] = 0;
@@ -807,8 +1451,7 @@
                     product.sizes.forEach(size => {
                         const selectedClass = (selectedSizes[product.id] === size) ? 'selected' : '';
                         sizeButtonsHTML += `
-                            <button class="size-btn ${selectedClass}" 
-                                    onclick="selectSize(${product.id}, '${size}')">
+                            <button class="size-btn ${selectedClass}" onclick="selectSize(${product.id}, '${size}')">
                                 ${size}
                             </button>
                         `;
@@ -835,7 +1478,6 @@
                 `;
             });
 
-            // إعادة تشغيل الدوران التلقائي بعد العرض
             productsToDisplay.forEach(product => {
                 if (product.images360) {
                     setTimeout(() => startAutoRotate(product.id), 500);
@@ -844,97 +1486,69 @@
         }
 
         // ============================================================
-        //  وظائف اختيار المقاس
+        //  وظائف السلة وغيرها (مستمرة)
         // ============================================================
-        function selectSize(productId, size) {
+        window.selectSize = function(productId, size) {
             selectedSizes[productId] = size;
-
             const container = document.getElementById(`sizeContainer-${productId}`);
             if (container) {
-                const buttons = container.querySelectorAll('.size-btn');
-                buttons.forEach(btn => {
+                container.querySelectorAll('.size-btn').forEach(btn => {
                     btn.classList.remove('selected');
-                    if (btn.textContent.trim() === size) {
-                        btn.classList.add('selected');
-                    }
+                    if (btn.textContent.trim() === size) btn.classList.add('selected');
                 });
             }
-
             const product = allProducts.find(p => p.id === productId);
-            if (product) {
-                showNotification(`✅ تم اختيار المقاس ${size} لمنتج "${product.name}"`);
-            }
-        }
+            if (product) showNotification(`✅ تم اختيار المقاس ${size} لمنتج "${product.name}"`);
+        };
 
-        // ============================================================
-        //  وظائف الدوران 360
-        // ============================================================
-        function startDrag(e, id) {
-            isDragging = true;
+        window.startDrag = function(e, id) { isDragging = true;
             dragStartX = e.clientX;
-            stopAutoRotate(id);
-        }
-
-        function startDragTouch(e, id) {
-            const touch = e.touches[0];
+            stopAutoRotate(id); };
+        window.startDragTouch = function(e, id) { const touch = e.touches[0];
             isDragging = true;
             dragStartX = touch.clientX;
-            stopAutoRotate(id);
-        }
-
-        function dragRotate(e, id) {
+            stopAutoRotate(id); };
+        window.dragRotate = function(e, id) {
             if (!isDragging) return;
             const product = allProducts.find(p => p.id === id);
             if (!product || !product.images360) return;
-
             const deltaX = e.clientX - dragStartX;
             if (Math.abs(deltaX) > 10) {
                 const direction = deltaX > 0 ? 1 : -1;
                 const img = document.getElementById(`img-${id}`);
                 if (!img) return;
-
                 const totalImages = product.images360.length;
                 currentImageIndex[id] = (currentImageIndex[id] + direction + totalImages) % totalImages;
                 img.src = product.images360[currentImageIndex[id]];
                 dragStartX = e.clientX;
             }
-        }
-
-        function dragRotateTouch(e, id) {
+        };
+        window.dragRotateTouch = function(e, id) {
             if (!isDragging) return;
             const touch = e.touches[0];
             const product = allProducts.find(p => p.id === id);
             if (!product || !product.images360) return;
-
             const deltaX = touch.clientX - dragStartX;
             if (Math.abs(deltaX) > 10) {
                 const direction = deltaX > 0 ? 1 : -1;
                 const img = document.getElementById(`img-${id}`);
                 if (!img) return;
-
                 const totalImages = product.images360.length;
                 currentImageIndex[id] = (currentImageIndex[id] + direction + totalImages) % totalImages;
                 img.src = product.images360[currentImageIndex[id]];
                 dragStartX = touch.clientX;
             }
-        }
-
-        function endDrag() {
-            isDragging = false;
-        }
+        };
+        window.endDrag = function() { isDragging = false; };
 
         function startAutoRotate(id) {
             const product = allProducts.find(p => p.id === id);
             if (!product || !product.images360) return;
-
             const img = document.getElementById(`img-${id}`);
             if (!img) return;
-
             if (isDragging) return;
-
             let index = 0;
             clearInterval(autoRotateIntervals[id]);
-
             autoRotateIntervals[id] = setInterval(() => {
                 index++;
                 if (index >= product.images360.length) index = 0;
@@ -942,82 +1556,72 @@
             }, 150);
         }
 
-        function stopAutoRotate(id) {
-            clearInterval(autoRotateIntervals[id]);
-        }
+        function stopAutoRotate(id) { clearInterval(autoRotateIntervals[id]); }
 
-        // ============================================================
-        //  باقي الوظائف
-        // ============================================================
-        function searchProducts() {
+        window.searchProducts = function() {
             const searchInput = document.getElementById('searchInput').value.trim().toLowerCase();
-            const filteredProducts = allProducts.filter(product => {
-                return product.name.toLowerCase().includes(searchInput);
-            });
-            displayProducts(filteredProducts);
-        }
+            const filtered = allProducts.filter(p => p.name.toLowerCase().includes(searchInput));
+            displayProducts(filtered);
+        };
 
-        function filterProducts(category) {
+        window.filterProducts = function(category, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
             if (category === 'الكل') {
                 displayProducts(allProducts);
             } else {
-                const filtered = allProducts.filter(product => product.category === category);
+                const filtered = allProducts.filter(p => p.category === category);
                 displayProducts(filtered);
             }
-        }
+        };
 
-        function toggleCart() {
+        window.toggleCart = function() {
             const sidebar = document.getElementById('cartSidebar');
             const overlay = document.getElementById('overlay');
+            if (!sidebar) return;
             sidebar.classList.toggle('open');
-            overlay.classList.toggle('show');
-            if (sidebar.classList.contains('open')) {
-                renderCart();
-            }
-        }
+            if (overlay) overlay.classList.toggle('show');
+            if (sidebar.classList.contains('open')) renderCart();
+        };
 
-        function addToCart(id) {
+        window.addToCart = function(id) {
             const product = allProducts.find(p => p.id === id);
             if (!product) return;
-
             const selectedSize = selectedSizes[id];
-            if (!selectedSize) {
+            if (product.sizes && product.sizes.length > 0 && !selectedSize) {
                 showNotification(`⚠️ يرجى اختيار مقاس لمنتج "${product.name}"`);
                 return;
             }
-
             const existingIndex = cart.findIndex(item => item.id === id && item.selectedSize === selectedSize);
             if (existingIndex !== -1) {
                 cart[existingIndex].quantity++;
             } else {
-                cart.push({
-                    ...product,
+                cart.push({ ...product,
                     quantity: 1,
-                    selectedSize: selectedSize
+                    selectedSize: selectedSize || 'غير محدد'
                 });
             }
-
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCartIconCount();
             renderCart();
-            showNotification(`✅ تم إضافة "${product.name}" (مقاس ${selectedSize}) إلى العربة!`);
-        }
+            showNotification(`✅ تم إضافة "${product.name}" إلى العربة!`);
+        };
 
         function updateCartIconCount() {
             const total = cart.reduce((sum, item) => sum + item.quantity, 0);
-            document.getElementById("CartCount").innerText = total;
+            const el = document.getElementById("CartCount");
+            if (el) el.innerText = total;
         }
 
         function renderCart() {
             const cartItems = document.getElementById("cartItems");
             const cartAviro = document.getElementById("cartAviro");
-
+            if (!cartItems) return;
             if (cart.length === 0) {
-                cartItems.innerHTML = "<p class='empty-cart-msg' style='text-align:center; padding:20px; color:#888;'>لا توجد منتجات في العربة حالياً.</p>";
-                cartAviro.innerText = "0 ج.م";
+                cartItems.innerHTML = "<p class='empty-cart-msg' style='text-align:center; padding:30px; color:#888;'>لا توجد منتجات في العربة</p>";
+                if (cartAviro) cartAviro.innerText = "0 ج.م";
                 return;
             }
-
             let total = 0;
             cartItems.innerHTML = "";
             cart.forEach(item => {
@@ -1040,67 +1644,69 @@
                     </div>
                 `;
             });
-            cartAviro.innerText = total + " ج.م";
+            if (cartAviro) cartAviro.innerText = total + " ج.م";
         }
 
-        function changeQuantity(id, change, size) {
+        window.changeQuantity = function(id, change, size) {
             const index = cart.findIndex(item => item.id === id && item.selectedSize === size);
             if (index === -1) return;
             cart[index].quantity += change;
-            if (cart[index].quantity <= 0) {
-                cart.splice(index, 1);
-            }
+            if (cart[index].quantity <= 0) cart.splice(index, 1);
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCartIconCount();
             renderCart();
-        }
+        };
 
-        function removeFromCart(id, size) {
+        window.removeFromCart = function(id, size) {
             cart = cart.filter(item => !(item.id === id && item.selectedSize === size));
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCartIconCount();
             renderCart();
-        }
+        };
 
-        function clearCart() {
+        window.clearCart = function() {
             if (confirm("هل أنت متأكد من تفريغ العربة بالكامل؟")) {
                 cart = [];
                 localStorage.setItem("cart", JSON.stringify(cart));
                 updateCartIconCount();
                 renderCart();
+                showNotification("🗑️ تم تفريغ العربة");
             }
-        }
+        };
 
-        function checkout() {
+        window.checkout = function() {
             if (cart.length === 0) {
-                alert("عربتك فارغة!");
+                showNotification("⚠️ عربتك فارغة!");
                 return;
             }
             toggleCart();
             document.getElementById('checkoutModal').classList.add('open');
-        }
+        };
 
-        function closeCheckoutModal() {
+        window.closeCheckoutModal = function() {
             document.getElementById('checkoutModal').classList.remove('open');
-        }
+        };
 
-        function sendOrderToWhatsApp() {
+        window.sendOrderToWhatsApp = function() {
             const name = document.getElementById('clientName').value.trim();
             const location = document.getElementById('clientLocation').value.trim();
-            if (!name || !location) {
-                alert("برجاء إدخال الاسم والموقع!");
+            const phone = document.getElementById('clientPhone').value.trim();
+            if (!name || !location || !phone) {
+                alert("برجاء إدخال جميع البيانات (الاسم، الموقع، رقم الهاتف)!");
                 return;
             }
             const whatsappNumber = "201108776432";
             let message = `*طلب جديد من متجر Aviro Store* 🛍️\n\n`;
             message += `👤 *الاسم:* ${name}\n`;
             message += `📍 *الموقع:* ${location}\n`;
+            message += `📱 *الهاتف:* ${phone}\n`;
             message += `----------------------------------\n📦 *المنتجات:*\n`;
             let total = 0;
             cart.forEach((item, index) => {
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
-                message += `${index + 1}. ${item.name} | مقاس: ${item.selectedSize} | ك: ${item.quantity} | ${itemTotal} ج.م\n`;
+                message +=
+                    `${index + 1}. ${item.name} | مقاس: ${item.selectedSize} | ك: ${item.quantity} | ${itemTotal} ج.م\n`;
             });
             message += `----------------------------------\n💰 *الإجمالي:* ${total} ج.م`;
             window.open(`https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`,
@@ -1110,31 +1716,39 @@
             updateCartIconCount();
             closeCheckoutModal();
             showNotification("✅ تم إرسال طلبك بنجاح!");
-        }
+        };
 
         function showNotification(message) {
             const notif = document.getElementById('notification');
+            if (!notif) return;
             notif.innerText = message;
             notif.classList.add('show');
             setTimeout(() => notif.classList.remove('show'), 3000);
         }
 
-        function showPrivacyPolicy(e) {
+        window.showPrivacyPolicy = function(e) {
             e.preventDefault();
             document.getElementById('privacyModal').classList.add('open');
-        }
-
-        function closePrivacyPolicy() {
-            document.getElementById('privacyModal').classList.remove('open');
-        }
-
-        // ============================================================
-        //  تشغيل التطبيق
-        // ============================================================
-        window.onload = function() {
-            displayProducts(allProducts);
-            updateCartIconCount();
         };
+
+        window.closePrivacyPolicy = function() {
+            document.getElementById('privacyModal').classList.remove('open');
+        };
+
+        // جعل الدوال عامة للاستخدام في HTML
+        window.displayProducts = displayProducts;
+        window.updateCartIconCount = updateCartIconCount;
+        window.renderCart = renderCart;
+        window.showNotification = showNotification;
+        window.startAutoRotate = startAutoRotate;
+        window.stopAutoRotate = stopAutoRotate;
+        window.allProducts = allProducts;
+        window.cart = cart;
+        window.selectedSizes = selectedSizes;
+        window.currentImageIndex = currentImageIndex;
+        window.autoRotateIntervals = autoRotateIntervals;
+        window.isDragging = isDragging;
+        window.dragStartX = dragStartX;
     </script>
 </body>
 

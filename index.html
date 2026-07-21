@@ -731,8 +731,16 @@
         <footer>
             <p>© 2026 Aviro Store. جميع الحقوق محفوظة</p>
             <div>
-                <a href="#" onclick="showPrivacyPolicy(event)">سياسة الخصوصية</a>
-                <a href="mailto:avirostore10@gmail.com">📧 اتصل بنا</a>
+            <a href="#" onclick="showPrivacyPolicy(event)">🌐 سياسة الخصوصية</a>
+<a href="mailto:avirostore10@gmail.com">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Gmail_Icon.png" alt="إيميل" width="20" height="20" style="vertical-align: middle;"> البريد الإلكتروني
+</a>
+<a href="https://www.facebook.com/share/1c6otjvVbP/" target="_blank">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="فيسبوك" width="20" height="20" style="vertical-align: middle;"> فيسبوك
+</a>
+<a href="https://wa.me/201108776432" target="_blank">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="واتساب" width="20" height="20" style="vertical-align: middle;"> واتساب
+</a>
             </div>
         </footer>
     </div>
@@ -750,18 +758,7 @@
             updatePassword
         } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDenPZuzh0U-7XZ1gAiiHDqit7SKCV276M",
-            authDomain: "aviro-store.firebaseapp.com",
-            projectId: "aviro-store",
-            storageBucket: "aviro-store.firebasestorage.app",
-            messagingSenderId: "272519712873",
-            appId: "1:272519712873:web:047f9baece0d153339d2f8",
-            measurementId: "G-M00WWV0FEH"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+    
 
         // ===== المتغيرات =====
         let cart = JSON.parse(localStorage.getItem('cart')) || [];

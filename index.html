@@ -464,9 +464,18 @@
             border-top: 1px solid #e0e0e0;
         }
         footer p { text-align: center; margin-bottom: 20px; }
-        footer div { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; }
-        footer a { color: #000000; text-decoration: none; transition: .3s; }
+        footer div { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; align-items: center; }
+        footer a { 
+            color: #000000; 
+            text-decoration: none; 
+            transition: .3s; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 6px;
+            font-size: 15px;
+        }
         footer a:hover { color: #555; }
+        footer a img { vertical-align: middle; }
 
         .privacy-modal {
             position: fixed;
@@ -515,6 +524,33 @@
         }
         .checkout-box input:focus { border-color: #ffffff; }
         .checkout-box input::placeholder { color: #666; }
+        .checkout-box input:read-only { background: #1a1a1a; cursor: default; }
+
+        .location-btn-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+        .location-btn-group input { flex: 1; min-width: 150px; }
+        .location-btn {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: 0.3s;
+            white-space: nowrap;
+            color: #fff;
+        }
+        .location-btn:hover { transform: scale(1.05); }
+        .location-btn.gps { background: #4CAF50; }
+        .location-btn.gps:hover { background: #45a049; }
+        .location-btn.map { background: #2196F3; }
+        .location-btn.map:hover { background: #0b7dda; }
+        .location-hint { color: #888; font-size: 12px; display: block; margin-top: 5px; }
 
         .image-360-container {
             width: 100%;
@@ -551,6 +587,9 @@
             .login-box { padding: 30px 20px; margin: 20px; }
             .header-buttons button { padding: 8px 14px; font-size: 13px; }
             .header-buttons .user-email { font-size: 11px; padding: 5px 10px; }
+            .location-btn-group { flex-direction: column; }
+            .location-btn-group input { min-width: 100%; }
+            .location-btn { width: 100%; text-align: center; }
         }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #1a1a1a; }
@@ -608,7 +647,7 @@
         </div>
     </div>
 
-    <!-- ===== شاشة إعادة تعيين كلمة المرور (مع حل يدوي) ===== -->
+    <!-- ===== شاشة إعادة تعيين كلمة المرور ===== -->
     <div id="resetPasswordScreen" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 99998; backdrop-filter: blur(10px); justify-content: center; align-items: center;">
         <div class="login-box">
             <img src="https://g.top4top.io/p_38369skks1.jpeg" alt="Aviro Logo" class="logo-img">
@@ -623,7 +662,7 @@
 
             <div class="divider">━━━━━━━━━ أو ━━━━━━━━━</div>
 
-            <!-- الطريقة 2: تغيير كلمة المرور يدوياً مع إرسال بريد -->
+            <!-- الطريقة 2: تغيير كلمة المرور يدوياً -->
             <div class="reset-manual-box">
                 <h3>🔧 تغيير كلمة المرور يدوياً</h3>
                 <p style="color:#888; font-size:13px; text-align:center; margin-bottom:12px;">
@@ -708,6 +747,7 @@
             </div>
         </div>
 
+        <!-- ===== مودال الدفع ===== -->
         <div id="checkoutModal" class="privacy-modal">
             <div class="privacy-modal-content">
                 <div class="privacy-modal-header">
@@ -718,11 +758,24 @@
                     <div class="checkout-box">
                         <label for="clientName">👤 الاسم بالكامل:</label>
                         <input type="text" id="clientName" placeholder="اكتب اسمك الثلاثي...">
-                        <label for="clientLocation">📍 عنوان السكن بالتفصيل:</label>
-                        <input type="text" id="clientLocation" placeholder="المحافظة، المدينة، الشارع، العلامة المميزة...">
+
+                        <label for="clientEmail">✉️ البريد الإلكتروني (سيصلك التأكيد عليه):</label>
+                        <input type="email" id="clientEmail" value="avirostore10@gmail.com" readonly style="background: #1a1a1a; cursor: default; opacity: 0.8;">
+
+                        <label for="clientLocation">📍 الموقع:</label>
+                        <div class="location-btn-group">
+                            <input type="text" id="clientLocation" placeholder="اكتب عنوانك أو اختر تلقائياً...">
+                            <button class="location-btn gps" onclick="getLocation()">📍 اختيار تلقائي</button>
+                            <button class="location-btn map" onclick="openMapPicker()">🗺️ اختيار يدوي</button>
+                        </div>
+                        <small class="location-hint">📍 اختر تلقائياً (جلب الموقع الحالي) أو افتح الخريطة وانسخ العنوان</small>
+
                         <label for="clientPhone">📱 رقم الهاتف:</label>
                         <input type="text" id="clientPhone" placeholder="مثال: 01012345678">
-                        <button class="checkout-btn" onclick="sendOrderToWhatsApp()" style="margin-top:20px;">تأكيد وإرسال عبر واتساب 💬</button>
+
+                        <button class="checkout-btn" onclick="sendOrderToWhatsApp()" style="margin-top:20px;">
+                            تأكيد وإرسال 💬
+                        </button>
                     </div>
                 </div>
             </div>
@@ -731,16 +784,16 @@
         <footer>
             <p>© 2026 Aviro Store. جميع الحقوق محفوظة</p>
             <div>
-            <a href="#" onclick="showPrivacyPolicy(event)">🌐 سياسة الخصوصية</a>
-<a href="mailto:avirostore10@gmail.com">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Gmail_Icon.png" alt="إيميل" width="20" height="20" style="vertical-align: middle;"> البريد الإلكتروني
-</a>
-<a href="https://www.facebook.com/share/1c6otjvVbP/" target="_blank">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="فيسبوك" width="20" height="20" style="vertical-align: middle;"> فيسبوك
-</a>
-<a href="https://wa.me/201108776432" target="_blank">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="واتساب" width="20" height="20" style="vertical-align: middle;"> واتساب
-</a>
+                <a href="#" onclick="showPrivacyPolicy(event)">🌐 سياسة الخصوصية</a>
+                <a href="mailto:avirostore10@gmail.com">
+                    <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="إيميل" width="20" height="20"> البريد الإلكتروني
+                </a>
+                <a href="https://www.facebook.com/share/1c6otjvVbP/" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="فيسبوك" width="20" height="20"> فيسبوك
+                </a>
+                <a href="https://wa.me/201108776432" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="واتساب" width="20" height="20"> واتساب
+                </a>
             </div>
         </footer>
     </div>
@@ -758,7 +811,18 @@
             updatePassword
         } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
-    
+        const firebaseConfig = {
+            apiKey: "AIzaSyDenPZuzh0U-7XZ1gAiiHDqit7SKCV276M",
+            authDomain: "aviro-store.firebaseapp.com",
+            projectId: "aviro-store",
+            storageBucket: "aviro-store.firebasestorage.app",
+            messagingSenderId: "272519712873",
+            appId: "1:272519712873:web:047f9baece0d153339d2f8",
+            measurementId: "G-M00WWV0FEH"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
         // ===== المتغيرات =====
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -823,14 +887,13 @@
         }];
 
         // ============================================================
-        //  ✅ إعداد EmailJS - جميع المفاتيح جاهزة
+        // ✅ إعداد EmailJS
         // ============================================================
         const EMAILJS_PUBLIC_KEY = "k-dLpl8wVPiqi3e1U";
         const EMAILJS_SERVICE_ID = "service_1etg6jm";
         const EMAILJS_TEMPLATE_ID = "template_sxevq7j";
         const STORE_EMAIL = "avirostore10@gmail.com";
 
-        // تهيئة EmailJS
         (function() {
             try {
                 emailjs.init({
@@ -842,19 +905,17 @@
             }
         })();
 
-        // ===== دالة إرسال البريد =====
-        async function sendEmail(toEmail, newPassword) {
+        async function sendEmail(toEmail, name, message, subject) {
             const templateParams = {
                 to_email: toEmail,
-                to_name: "عميل Aviro",
-                new_password: newPassword,
+                to_name: name,
+                from_name: "Aviro Store",
+                from_email: STORE_EMAIL,
+                message: message,
+                subject: subject,
                 store_name: "Aviro Store",
-                store_email: STORE_EMAIL,
                 year: new Date().getFullYear()
             };
-
-            console.log("📧 جاري إرسال البريد من:", STORE_EMAIL);
-            console.log("📧 إلى:", toEmail);
 
             try {
                 const response = await emailjs.send(
@@ -871,8 +932,6 @@
         }
 
         // ===== دوال المصادقة =====
-        
-        // تسجيل الدخول
         window.handleLogin = async function() {
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value.trim();
@@ -913,7 +972,6 @@
             }
         };
 
-        // إنشاء حساب
         window.handleRegister = async function() {
             const email = document.getElementById('registerEmail').value.trim();
             const password = document.getElementById('registerPassword').value.trim();
@@ -967,7 +1025,6 @@
             }
         };
 
-        // إرسال رابط إعادة التعيين عبر البريد
         window.handleResetPassword = async function() {
             const email = document.getElementById('resetEmail').value.trim();
             const errorEl = document.getElementById('resetError');
@@ -1009,7 +1066,6 @@
             }
         };
 
-        // ===== تغيير كلمة المرور يدوياً مع إرسال بريد =====
         window.handleManualReset = async function() {
             const email = document.getElementById('manualEmail').value.trim();
             const oldPassword = document.getElementById('manualOldPassword').value.trim();
@@ -1018,11 +1074,9 @@
             const resultDiv = document.getElementById('manualResetResult');
             const btn = document.getElementById('manualResetBtn');
 
-            // إخفاء النتيجة السابقة
             resultDiv.className = 'reset-result';
             resultDiv.style.display = 'block';
 
-            // التحقق من الحقول
             if (!email || !oldPassword || !newPassword || !confirmPassword) {
                 resultDiv.className = 'reset-result error';
                 resultDiv.textContent = '⚠️ يرجى ملء جميع الحقول';
@@ -1045,33 +1099,22 @@
             btn.textContent = 'جاري التغيير... ⏳';
 
             try {
-                // 1. تسجيل الدخول باستخدام البريد وكلمة المرور الحالية
                 const userCredential = await signInWithEmailAndPassword(auth, email, oldPassword);
                 const user = userCredential.user;
-
-                // 2. تغيير كلمة المرور في Firebase
                 await updatePassword(user, newPassword);
+                
+                // إرسال إيميل للمستخدم من المتجر
+                const message = `تم تغيير كلمة المرور الخاصة بحسابك في متجر Aviro Store بنجاح.\n\nكلمة المرور الجديدة: ${newPassword}\n\nيرجى حفظها في مكان آمن.`;
+                await sendEmail(email, "عميل Aviro", message, "✅ تم تغيير كلمة المرور");
 
-                // 3. إرسال البريد الإلكتروني من avirostore10@gmail.com
-                const emailSent = await sendEmail(email, newPassword);
-
-                if (emailSent) {
-                    resultDiv.className = 'reset-result success';
-                    resultDiv.innerHTML = `
-                        ✅ تم تغيير كلمة المرور بنجاح!<br>
-                        📧 تم إرسال كلمة المرور الجديدة إلى بريدك من <strong style="color:#ffa726;">avirostore10@gmail.com</strong>
-                    `;
-                } else {
-                    resultDiv.className = 'reset-result success';
-                    resultDiv.innerHTML = `
-                        ✅ تم تغيير كلمة المرور بنجاح!<br>
-                        ⚠️ فشل إرسال البريد. كلمة المرور الجديدة: <strong>${newPassword}</strong>
-                    `;
-                }
+                resultDiv.className = 'reset-result success';
+                resultDiv.innerHTML = `
+                    ✅ تم تغيير كلمة المرور بنجاح!<br>
+                    📧 تم إرسال كلمة المرور الجديدة إلى بريدك من <strong style="color:#ffa726;">avirostore10@gmail.com</strong>
+                `;
                 
                 showNotification('✅ تم تغيير كلمة المرور بنجاح!');
                 
-                // العودة إلى شاشة الدخول بعد 3 ثواني
                 setTimeout(() => {
                     showLogin();
                     document.getElementById('manualEmail').value = '';
@@ -1104,7 +1147,6 @@
             }
         };
 
-        // تسجيل الخروج
         window.handleLogout = async function() {
             if (confirm('هل تريد تسجيل الخروج؟')) {
                 try {
@@ -1198,7 +1240,6 @@
             document.getElementById('resetPasswordBtn')?.addEventListener('click', window.handleResetPassword);
             document.getElementById('manualResetBtn')?.addEventListener('click', window.handleManualReset);
 
-            // مفتاح Enter
             document.getElementById('loginEmail')?.addEventListener('keyup', function(e) {
                 if (e.key === 'Enter') window.handleLogin();
             });
@@ -1235,7 +1276,116 @@
             document.getElementById('resetPasswordScreen').style.display = 'none';
         });
 
-        // ===== وظائف المنتجات والسلة (نفس الكود الأصلي) =====
+        // ===== دوال الموقع =====
+        window.getLocation = function() {
+            if (!navigator.geolocation) {
+                alert("⚠️ المتصفح لا يدعم خاصية تحديد الموقع!");
+                return;
+            }
+
+            const locationInput = document.getElementById('clientLocation');
+            locationInput.value = '⏳ جاري جلب الموقع...';
+
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    
+                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const address = data.display_name || `${lat}, ${lng}`;
+                            locationInput.value = address;
+                            showNotification('✅ تم تحديد الموقع بنجاح!');
+                        })
+                        .catch(() => {
+                            locationInput.value = `${lat}, ${lng}`;
+                            showNotification('✅ تم تحديد الموقع (الإحداثيات)');
+                        });
+                },
+                function(error) {
+                    let errorMessage = '⚠️ فشل في جلب الموقع';
+                    if (error.code === 1) errorMessage = '⚠️ المستخدم رفض مشاركة الموقع';
+                    else if (error.code === 2) errorMessage = '⚠️ الموقع غير متوفر حالياً';
+                    else if (error.code === 3) errorMessage = '⚠️ انتهت مهلة جلب الموقع';
+                    
+                    locationInput.value = '';
+                    alert(errorMessage + '\nيمكنك كتابة العنوان يدوياً.');
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+        };
+
+        window.openMapPicker = function() {
+            window.open('https://www.google.com/maps', '_blank');
+            showNotification('🗺️ اختر موقعك على الخريطة ثم انسخ العنوان والصقه في الحقل');
+            const locationInput = document.getElementById('clientLocation');
+            locationInput.placeholder = 'الصق العنوان من الخريطة هنا...';
+            locationInput.value = '';
+            locationInput.focus();
+        };
+
+        // ===== إرسال الطلب =====
+        window.sendOrderToWhatsApp = function() {
+            const name = document.getElementById('clientName').value.trim();
+            const email = document.getElementById('clientEmail').value.trim();
+            const location = document.getElementById('clientLocation').value.trim();
+            const phone = document.getElementById('clientPhone').value.trim();
+
+            if (!name || !email || !location || !phone) {
+                alert("⚠️ برجاء إدخال جميع البيانات (الاسم، الموقع، رقم الهاتف)!");
+                return;
+            }
+
+            if (!email.includes('@') || !email.includes('.')) {
+                alert("⚠️ برجاء إدخال بريد إلكتروني صحيح!");
+                return;
+            }
+
+            let message = `مرحباً ${name}،\n\n`;
+            message += `شكراً لتسوقك من متجر Aviro Store 🛍️\n`;
+            message += `تم استلام طلبك بنجاح.\n\n`;
+            message += `📦 تفاصيل طلبك:\n`;
+            message += `👤 الاسم: ${name}\n`;
+            message += `📍 الموقع: ${location}\n`;
+            message += `📱 الهاتف: ${phone}\n`;
+            message += `----------------------------------\n📦 المنتجات:\n`;
+
+            let total = 0;
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                message += `${index + 1}. ${item.name} | مقاس: ${item.selectedSize} | ك: ${item.quantity} | ${itemTotal} ج.م\n`;
+            });
+
+            message += `----------------------------------\n💰 الإجمالي: ${total} ج.م\n\n`;
+            message += `---\n`;
+            message += `📧 هذا البريد مرسل من متجر Aviro Store\n`;
+            message += `📧 avirostore10@gmail.com`;
+
+            // ✅ فتح البريد الإلكتروني (mailto) مع الإيميل الثابت
+            const subject = encodeURIComponent("✅ تأكيد طلبك من متجر Aviro Store");
+            const body = encodeURIComponent(message);
+            window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+
+            // ✅ فتح واتساب للمتجر
+            window.open(`https://wa.me/201108776432?text=${encodeURIComponent(`🛍️ طلب جديد من ${name}\n📱 ${phone}\n📍 ${location}\n💰 ${total}ج.م`)}`, '_blank');
+
+            // تفريغ العربة
+            setTimeout(() => {
+                cart = [];
+                localStorage.setItem("cart", JSON.stringify(cart));
+                updateCartIconCount();
+                closeCheckoutModal();
+                showNotification("✅ تم فتح البريد! أرسل الرسالة.");
+            }, 3000);
+        };
+
+        // ===== وظائف المنتجات والسلة =====
         function displayProducts(productsToDisplay) {
             const container = document.getElementById('productsContainer');
             if (!container) return;
@@ -1501,36 +1651,6 @@
             document.getElementById('checkoutModal').classList.remove('open');
         };
 
-        window.sendOrderToWhatsApp = function() {
-            const name = document.getElementById('clientName').value.trim();
-            const location = document.getElementById('clientLocation').value.trim();
-            const phone = document.getElementById('clientPhone').value.trim();
-            if (!name || !location || !phone) {
-                alert("برجاء إدخال جميع البيانات (الاسم، الموقع، رقم الهاتف)!");
-                return;
-            }
-            const whatsappNumber = "201108776432";
-            let message = `*طلب جديد من متجر Aviro Store* 🛍️\n\n`;
-            message += `👤 *الاسم:* ${name}\n`;
-            message += `📍 *الموقع:* ${location}\n`;
-            message += `📱 *الهاتف:* ${phone}\n`;
-            message += `----------------------------------\n📦 *المنتجات:*\n`;
-            let total = 0;
-            cart.forEach((item, index) => {
-                const itemTotal = item.price * item.quantity;
-                total += itemTotal;
-                message +=
-                    `${index + 1}. ${item.name} | مقاس: ${item.selectedSize} | ك: ${item.quantity} | ${itemTotal} ج.م\n`;
-            });
-            message += `----------------------------------\n💰 *الإجمالي:* ${total} ج.م`;
-            window.open(`https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`,
-                '_blank');
-            cart = [];
-            localStorage.setItem("cart", JSON.stringify(cart));
-            updateCartIconCount();
-            closeCheckoutModal();
-            showNotification("✅ تم إرسال الطلب عبر WhatsApp!");
-        };
         function showNotification(message) {
             const notif = document.getElementById('notification');
             if (!notif) return;
@@ -1562,7 +1682,10 @@
         window.autoRotateIntervals = autoRotateIntervals;
         window.isDragging = isDragging;
         window.dragStartX = dragStartX;
+        window.sendEmail = sendEmail;
+        window.STORE_EMAIL = STORE_EMAIL;
     </script>
 </body>
 
+</html>
 </html>
